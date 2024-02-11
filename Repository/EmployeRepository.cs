@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using EmployeeDetails.Interface;
 using EmployeeDetails.Model;
 using MongoDB.Driver;
@@ -15,17 +16,23 @@ namespace EmployeeDetails.Repository
         {
             var database = mongoClient.GetDatabase(settings.DatabaseName);
             _employe = database.GetCollection<Employe>("Employe");
-            _company = database.GetCollection<Company>("companies");
+            _company = database.GetCollection<Company>("Company");
         }
 
-        public async Task<List<EmployeeCompanyData>> GetCombinedDataByCompanyNameAsync(string companyName  )
+        public async Task<List<EmployeeCompanyData>> GetCombinedDataByCompanyNameAsync(string companyName ,string name )
         {
-            var filter = Builders<Employe>.Filter.Eq(x => x.Companyname, companyName);
+            var filterBuilder = Builders<Employe>.Filter;
+            var filter = filterBuilder.Eq(x => x.CompanyName, companyName);
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                filter &= filterBuilder.Eq(x => x.Name, name);
+            }
 
             var employeeProjection = Builders<Employe>.Projection
                 .Include(x => x.Designation)
                 .Include(x => x.Name)
-                .Include(x => x.Companyname);
+                .Include(x => x.CompanyName);
 
             var employees = await _employe
                 .Find(filter)
@@ -51,10 +58,10 @@ namespace EmployeeDetails.Repository
             {
                 combinedData.Add(new EmployeeCompanyData
                 {
-                    Designation = employee.Designation,
-                    Name = employee.Name,
-                    CompanyName = employee.CompanyName,
-                    Location = company.Location
+                    designation = employee.designation,
+                    name = employee.name,
+                    companyName = employee.companyName,
+                    location = company.Location
 
                 });
             }

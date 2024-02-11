@@ -4,7 +4,7 @@ namespace EmployeeDetails.Interface
 {
     public interface IEmploye
     {
-        Task<List<EmployeeCompanyData>> GetCombinedDataByCompanyNameAsync(string companyName);
+        Task<List<EmployeeCompanyData>> GetCombinedDataByCompanyNameAsync(string companyName , string name);
         List<Employe> Get();
         Employe Get(string id);
         Employe Create(Employe employe);

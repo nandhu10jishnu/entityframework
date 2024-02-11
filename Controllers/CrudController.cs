@@ -23,7 +23,7 @@ namespace EmployeeDetails.Controllers
             }
 
             
-            var employeesInCompany = iemploye.Get().Where(emp => emp.Companyname == companyName).ToList();
+            var employeesInCompany = iemploye.Get().Where(emp => emp.CompanyName == companyName).ToList();
 
             if (employeesInCompany.Count > 0)
             {
@@ -35,14 +35,14 @@ namespace EmployeeDetails.Controllers
             }
         }
         [HttpGet("GetCombinedDataByCompanyName")]
-        public async Task<ActionResult<List<EmployeeCompanyData>>> GetCombinedDataByCompanyNameAsync([FromQuery] string companyName)
+        public async Task<ActionResult<List<EmployeeCompanyData>>> GetCombinedDataByCompanyNameAsync(string companyName, [FromQuery] string? name = null)
         {
             if (string.IsNullOrEmpty(companyName))
             {
                 return BadRequest("Company name cannot be empty");
             }
 
-            var combinedData = await iemploye.GetCombinedDataByCompanyNameAsync(companyName);
+            var combinedData = await iemploye.GetCombinedDataByCompanyNameAsync(companyName, name);
 
             if (combinedData != null && combinedData.Any())
             {

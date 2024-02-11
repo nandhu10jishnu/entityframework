@@ -11,8 +11,8 @@ namespace EmployeeDetails.Model
         [BsonElement("name")]
         public string Name { get; set; } = string.Empty;
 
-        [BsonElement("companyname")]
-        public string Companyname { get; set; }
+        [BsonElement("companyName")]
+        public string CompanyName { get; set; }
 
         [BsonElement("designation")]
         public string Designation { get; set; } 
